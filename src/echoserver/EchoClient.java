@@ -22,6 +22,7 @@ public class EchoClient {
             Socket socket = new Socket(server, PORT_NUMBER);
 
             InputStream userInput = System.in;
+            // OutputStream userOutput = System.out;
             OutputStream out = socket.getOutputStream();
             InputStream in = socket.getInputStream();
 
@@ -29,20 +30,21 @@ public class EchoClient {
             Thread inputThread = new Thread(new InputHandler(userInput, out));
             inputThread.start();
 
-            System.out.println("input thread done starting");
+            // System.out.println("input thread done starting");
 
             // Thread for reading from server and printing to standard output
             Thread outputThread = new Thread(new OutputHandler(in));
             outputThread.start();
 
-            System.out.println("output thread done starting");
+            // System.out.println("output thread done starting");
 
             // Wait for threads to finish
             inputThread.join();
-            System.out.println("input thread joined");
+            // System.out.println("input thread joined");
+            socket.shutdownOutput(); //very imporatnt
             outputThread.join();
 
-            System.out.println("threads joined");
+            // System.out.println("threads joined");
 
             socket.close();
         } catch (IOException | InterruptedException e) {
@@ -69,7 +71,7 @@ public class EchoClient {
                     out.write(data);
                     out.flush();
                 }
-                System.out.println("done with input handler");
+                // System.out.println("done with input handler");
             } catch (IOException e) {
                 System.err.println("Error reading from user input or sending to server.");
                 e.printStackTrace();
@@ -95,7 +97,7 @@ public class EchoClient {
                     data = in.read();
                     if (data == -1) {
                         // End of stream, break the loop
-                        System.out.println("End of stream reached. Closing output thread.");
+                        // System.out.println("End of stream reached. Closing output thread.");
                         break;
                     }
 

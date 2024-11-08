@@ -77,7 +77,7 @@ import java.util.concurrent.Executors;
 
 public class EchoServer {
     public static final int PORT_NUMBER = 6013;
-    private static final int THREAD_POOL_SIZE = 10; 
+    private static final int THREAD_POOL_SIZE = 20; 
 
     public static void main(String[] args) throws IOException {
         EchoServer server = new EchoServer();
@@ -127,10 +127,14 @@ public class EchoServer {
                 while (true) {
                     try {
                         inputByte = in.readByte(); // Read a byte
-                        out.writeByte(inputByte); // Echo the byte back
+                        out.writeByte((char)inputByte); // Echo the byte back
                         System.out.println("Echoed byte: " + inputByte);
+                        // if (inputByte == -1) {
+                        //     break;
+                        // }
                     } catch (EOFException e) {
                         // End of stream reached, break the loop
+                        System.out.println("end of input");
                         break;
                     }
                 }
@@ -139,6 +143,7 @@ public class EchoServer {
             } finally {
                 try {
                     clientSocket.close(); // Close the client socket
+                    System.out.println("client socket closed");
                 } catch (IOException e) {
                     System.out.println("Error closing client socket: " + e.getMessage());
                 }
